@@ -78,7 +78,7 @@ class CustomerController extends Controller
 
             
         if ( Customer::create($response) ){
-            return response($content = ["status" => "success", "data" => ["attributes" => $response]], $status = 201);
+            return response($content = ["status" => "success", "data" => $response], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
         }
@@ -90,7 +90,7 @@ class CustomerController extends Controller
         $data = Customer::find($id);
 
         if ( $data ){
-            return response($content = ["status" => "success", "data" => ["attributes" => $data]], $status = 201);
+            return response($content = ["status" => "success", "data" => $data], $status = 201);
         } else {
             return response($content = ["status" => "failed", "messages"=>"customer not found!"]);
         }

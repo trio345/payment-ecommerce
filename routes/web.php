@@ -23,5 +23,6 @@ $router->get('/', function () use ($router) {
         $router->put('/customer/{id}', 'CustomerController@update');
         $router->delete('/customer/{id}', 'CustomerController@delete');
 
-        $router->post('payment/create', 'PaymentController@create');
+        $router->post('/payment/create', 'PaymentController@create');
+        $router->post('/pushNotif', 'PaymentController@create');
     });
