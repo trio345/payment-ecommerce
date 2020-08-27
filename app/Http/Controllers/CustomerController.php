@@ -45,13 +45,7 @@ class CustomerController extends Controller
         $data->full_name = $request->input('full_name');
         $data->email = $request->input('email');
         $data->phone_number = $request->input('phone_number');
-        
-        if ( Hash::check($request->input('password'), $data->password)){
-            $data->password = Hash::make($request->password);
-        } else {
-            return response($content = ["status" => "300", "messages" => "password didn't match!"]);
-        }
-        
+    
         if ( $data->save() ){
             return response($content = ["status" => "success", "data" => $data], $status = 201);
         } else {
@@ -73,7 +67,7 @@ class CustomerController extends Controller
             "full_name" => $request->input('full_name'),
             "email" => $request->input('email'),
             "phone_number" => $request->input('phone_number'),
-            "password" => Hash::make($request->input('password'))
+            "password" => ($request->input('password'))
         ];
 
             
