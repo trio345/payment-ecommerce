@@ -66,7 +66,8 @@ class CustomerController extends Controller
         $response = [
             "full_name" => $request->input('full_name'),
             "email" => $request->input('email'),
-            "phone_number" => $request->input('phone_number')
+            "phone_number" => $request->input('phone_number'),
+            "password" => $request->input('password')
         ];
 
             
