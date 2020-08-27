@@ -31,4 +31,9 @@ class Customer extends Model implements AuthenticatableContract, AuthorizableCon
     protected $hidden = [
         'password',
     ];
+
+    public function users(){
+        return $this->belongsTo('App\User');
+    }
+
 }

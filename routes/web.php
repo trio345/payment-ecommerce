@@ -23,6 +23,24 @@ $router->get('/', function () use ($router) {
         $router->put('/customer/{id}', 'CustomerController@update');
         $router->delete('/customer/{id}', 'CustomerController@delete');
 
-        $router->post('/payment/create', 'PaymentController@create');
-        $router->post('/pushNotif', 'PaymentController@create');
+        $router->post('/order', 'OrderController@create');
+        $router->get('/order', 'OrderController@index');
+        $router->get('/order/{id}', 'OrderController@find');
+        $router->patch('/order/{id}', 'OrderController@update');
+        $router->delete('/order/{id}', 'OrderController@delete');
+
+        $router->post('/product', 'ProductController@create');
+        $router->get('/product', 'ProductController@index');
+        $router->get('/product/{id}', 'ProductController@find');
+        $router->patch('/product/{id}', 'ProductController@update');
+        $router->delete('/product/{id}', 'ProductController@delete');
+
+        $router->post('/payment', 'PaymentController@create');
+        $router->get('/payment', 'PaymentController@index');
+        $router->get('/payment/{id}', 'PaymentController@find');
+        $router->patch('/payment/{id}', 'PaymentController@update');
+        $router->delete('/payment/{id}', 'PaymentController@delete');
+
+        $router->post('/payment/midtrans/push', 'PaymentController@pushNotif');
+
     });
