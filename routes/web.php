@@ -15,4 +15,13 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('payment/create', 'PaymentController@create');
+    $router->group(['prefix' => 'api/v1'], function () use($router){
+        
+        $router->post('/customer', 'CustomerController@create');
+        $router->get('/customer', 'CustomerController@index');
+        $router->get('/customer/{id}', 'CustomerController@find');
+        $router->put('/customer/{id}', 'CustomerController@update');
+        $router->delete('/customer/{id}', 'CustomerController@delete');
+
+        $router->post('payment/create', 'PaymentController@create');
+    });
