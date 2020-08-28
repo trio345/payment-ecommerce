@@ -75,6 +75,9 @@ class ProductController extends Controller
             "images" => $request->input('images')
         ];
 
+        // var_dump($data);
+        // dd();
+
         if ( Product::create($data) ){
             return response($content = ["status" => "success", "data" => $data], $status = 201);
         } else {
