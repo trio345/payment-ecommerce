@@ -56,7 +56,6 @@ class CustomerController extends Controller
     public function changePassword(Request $request, $id){
         if ( Customer::find($id) != [] ){
             $data = Customer::find($id);
-            
         } else {
             return response()->json($content = ["status" => "302", "messages" => "user not found"]);
         }
@@ -71,6 +70,7 @@ class CustomerController extends Controller
             return response()->json($content = ["status" => 300, "messages" => "wrong password!"]);
         } else {
             $data->password = $req["new_password"];
+            $data->save();
             return response()->json($content = ["status" => 400, "messages" => "password has been changed!"], 400);
         }
 
