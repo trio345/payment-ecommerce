@@ -61,11 +61,7 @@ class PaymentController extends Controller
 
     public function create(Request $request)
     {
-        $this->validate($request, [
-            'payment_type' => 'required',
-            'gross_amount' => 'required',
-            'order_id' => 'required'            
-        ]);
+        
 
         $req = $request->all();
 
@@ -88,11 +84,25 @@ class PaymentController extends Controller
                 "change" => $this->transaction_req["transaction_details"]["gross_amount"] - $this->transaction_req["transaction_details"]["cash"] 
             ];
 
+            $this->validate($request, [
+                'payment_type' => 'required',
+                'gross_amount' => 'required',
+                'order_id' => 'required'            
+            ]);
+
         } else {
+            $this->validate($request, [
+                'payment_type' => 'required',
+                'gross_amount' => 'required',
+                'order_id' => 'required',
+                'bank' => 'required'          
+            ]);
+
             $this->transaction_req = [
                 "payment_type" => $req['payment_type'],
                 "bank_transfer" => [
-                    "bank" => $req['bank']
+                    "bank" => $req['bank'],
+                    "va_number" => $req['va_number']
                 ],
                 "transaction_details" => [
                     "order_id" => $req["order_id"],
@@ -108,7 +118,7 @@ class PaymentController extends Controller
     
             $response = Http::withHeaders($http_header)->post($this->url, $this->transaction_req);
             $data = $response->json();
-            
+
             if ( $data["status_code"] == "406") {
                 return response()->json(["status" => "failed", 
                                          "message" => "Transaksi sudah dilakukan! periksa kembali order_id anda"], 406);
