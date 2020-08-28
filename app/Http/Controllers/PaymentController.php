@@ -119,6 +119,8 @@ class PaymentController extends Controller
     
             $response = Http::withHeaders($http_header)->post($this->url, $this->transaction_req);
             $data = $response->json();
+            print_r($data);
+            dd();
 
             if ( $data["status_code"] == "406") {
                 return response()->json(["status" => "failed", 
