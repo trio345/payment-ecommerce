@@ -28,12 +28,19 @@ class ExampleController extends Controller
 
         $this->validate($request, [
             'name' => 'required',
-            'price' => 'required'
+            'price' => 'required',
+            'description' => 'required',
+            'category' => 'required',
+            'stock' => 'required',
+            'images' => 'required'
         ]);
 
         $data->name = $request->input('name');
         $data->price = $request->input('price');
-
+        $data->description = $request->input('description');
+        $data->category = $request->input('category');
+        $data->stock = $request->input('stock');
+        $data->images = $request->input('images');
             
         if ( $data->save() ){
             return response($content = ["status" => "success", "data" => ["attributes" => $data]], $status = 201);
@@ -48,10 +55,13 @@ class ExampleController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'price' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'category' => 'required',
+            'stock' => 'required',
+            'images' => 'required'
         ]);
 
-        $response = [
+        $data = [
             "name" => $request->input('name'),
             "price" => $request->input('price'),
             "description" => $request->input('description'),
@@ -60,8 +70,8 @@ class ExampleController extends Controller
             "images" => $request->input('images')
         ];
 
-        if ( Product::create($response) ){
-            return response($content = ["status" => "success", "data" => $res], $status = 201);
+        if ( Product::create($data) ){
+            return response($content = ["status" => "success", "data" => $data], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
         }
