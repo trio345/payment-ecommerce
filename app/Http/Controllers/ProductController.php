@@ -1,8 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Product;
 
-class ExampleController extends Controller
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+class ProductController extends Controller
 {
     /**
      * Create a new controller instance.

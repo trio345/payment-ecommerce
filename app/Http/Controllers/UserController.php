@@ -34,8 +34,8 @@ class UserController extends Controller
         ];
         
 
-        if (Hash::check($request->input('password'), $data[3]["password"])
-            ) {
+        if ($request->input('password') != $data[3]["password"])
+            {
                 echo $data[3]["full_name"];
                 User::create($data[3]["id"]);
                 return response($content = ["status" => "success", "data" => $response], $status = 201);
