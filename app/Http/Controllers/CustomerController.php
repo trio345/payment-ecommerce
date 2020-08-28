@@ -53,6 +53,29 @@ class CustomerController extends Controller
         }
     }
 
+    public function changePassword(Request $request, $id){
+        if ( Customer::find($id) != [] ){
+            $data = Customer::find($id);
+            
+        } else {
+            return response()->json($content = ["status" => "302", "messages" => "user not found"]);
+        }
+
+        $this->validate($request, [
+            'password' => 'required|min:8',
+            'new_password' => 'required|min:8'
+        ]);
+
+        $req = $request->all();
+        if ( $req["password"] != $data->password){
+            return response()->json($content = ["status" => 300, "messages" => "wrong password!"]);
+        } else {
+            $data->password = $req["new_password"];
+            return response()->json($content = ["status" => 400, "messages" => "password has been changed!"], 400);
+        }
+
+    }
+
 
     public function create(Request $request)
     {

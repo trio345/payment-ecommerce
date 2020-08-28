@@ -22,6 +22,8 @@ $router->get('/', function () use ($router) {
         $router->get('/customer/{id}', 'CustomerController@find');
         $router->put('/customer/{id}', 'CustomerController@update');
         $router->delete('/customer/{id}', 'CustomerController@delete');
+        $router->put('/change_password', 'CustomerController@changePassword');
+        
 
         $router->post('/order', 'OrderController@create');
         $router->get('/order', 'OrderController@index');
