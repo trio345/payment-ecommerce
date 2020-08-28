@@ -61,14 +61,11 @@ class CustomerController extends Controller
         }
 
         $this->validate($request, [
-            'password' => 'required|min:8',
             'new_password' => 'required|min:8'
         ]);
 
         $req = $request->all();
-        if ( $req["password"] != $data->password){
-            return response()->json($content = ["status" => 300, "messages" => "wrong password!"]);
-        } else {
+        if ($req != []){
             $data->password = $req["new_password"];
             $data->save();
             return response()->json($content = ["status" => 400, "messages" => "password has been changed!"], 400);
