@@ -18,7 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('order_id')->unsigned();
             $table->string('transaction_id');
             $table->string('payment_type');
-            $table->integer('gross_amount');
+            $table->string('gross_amount');
             $table->integer("cash")->default(0);
             $table->integer("change")->default(0);
             $table->string('transaction_time');

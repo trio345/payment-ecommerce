@@ -95,7 +95,8 @@ class PaymentController extends Controller
                 'payment_type' => 'required',
                 'gross_amount' => 'required',
                 'order_id' => 'required',
-                'bank' => 'required'          
+                'bank' => 'required',
+                'va_number' => 'required'   
             ]);
 
             $this->transaction_req = [
