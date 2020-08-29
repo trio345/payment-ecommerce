@@ -140,7 +140,7 @@ class PaymentController extends Controller
         if (Payment::create($this->insertData)){
             return response()->json(["status" => "success", 
                                 "message" => "Transaksi berhasil!",
-                                "results" => $this->insertData ], 200);
+                                "results" => $data ], 200);
         } else {
             return response()->json(["status" => "failed",
                                  "message" => "Transaksi gagal mohon hubungi admin"], 401);
@@ -173,7 +173,7 @@ class PaymentController extends Controller
     public function pushNotif(Request $request){
         $req = $request->all();
         $pay = Payment::where('order_id', $req["order_id"])->get();
-
+        
         $payment = Payment::find($pay[0]->id);
         
         if(!$pay){
