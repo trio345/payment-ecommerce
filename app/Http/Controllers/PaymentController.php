@@ -71,7 +71,7 @@ class PaymentController extends Controller
                 "transaction_details" => [
                     "order_id" => $req["order_id"],
                     "gross_amount" => $req["gross_amount"],
-                    "cash" => $req["pay"]
+                    "cash" => $req["paid"]
                 ]];
                 
             $this->insertData = [
