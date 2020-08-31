@@ -81,6 +81,7 @@ class PaymentController extends Controller
                 "gross_amount" => $this->transaction_req["transaction_details"]["gross_amount"],
                 "transaction_time" => date('Y-m-d'),
                 "transaction_status" => "finish",
+                "cash" => $this->transaction_req["transaction_details"]["cash"],
                 "change" => $this->transaction_req["transaction_details"]["cash"] - intval($this->transaction_req["transaction_details"]["gross_amount"])
             ];
 
@@ -88,7 +89,7 @@ class PaymentController extends Controller
                 'payment_type' => 'required',
                 'gross_amount' => 'required',
                 'order_id' => 'required'            
-            ]);intval($this->transaction_req["transaction_details"]["gross_amount"]) - 
+            ]);
             $data = $this->insertData;
 
         } else {
