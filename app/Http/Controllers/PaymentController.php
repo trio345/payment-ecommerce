@@ -89,6 +89,7 @@ class PaymentController extends Controller
                 'gross_amount' => 'required',
                 'order_id' => 'required'            
             ]);
+            $data = $this->insertData;
 
         } else {
             $this->validate($request, [
