@@ -136,7 +136,6 @@ class PaymentController extends Controller
                 ];
             }
 
-
         }
         
         if (Payment::create($this->insertData)){
