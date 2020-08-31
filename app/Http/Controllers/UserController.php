@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Customer;
+use App\User;
 
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -16,33 +18,26 @@ class UserController extends Controller
      * @return void
      */
 
-    public function create(Request $request)
+    public function login(Request $request)
     {
-        $data = Customer::all()->where('email', $request->input('email'));
-        
+        $data = Customer::where('email', $request->input('email'))->get();
 
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required|min:8'
         ]);
 
-        $response = [
-            "full_name" => $data[3]["full_name"],
-            "email" => $data[3]["email"],
-            "phone_number" => $data[3]["phone_number"],
-            "password" => $data[3]["password"]
-        ];
-        
+        $req = $request->all();
 
-        if ($request->input('password') != $data[3]["password"])
+        if ( $req["email"] == $data[0]["email"] && 
+             $req["password"] == $data[0]["password"])
             {
-                echo $data[3]["full_name"];
-                User::create($data[3]["id"]);
-                return response($content = ["status" => "success", "data" => $response], $status = 201);
+                $user = new User();
+                $user->user_id = $data[0]["id"];
+                $user->save();
+                return response($content = ["status" => "success login", "data" => $data[0]], $status = 201);
             } else {
                 return response($content = ["status" => "failed", "message" => "failed login wrong email or password"], 300);
             }
-            
-        
     }
 }

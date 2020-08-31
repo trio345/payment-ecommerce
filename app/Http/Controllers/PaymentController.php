@@ -88,7 +88,7 @@ class PaymentController extends Controller
                 'payment_type' => 'required',
                 'gross_amount' => 'required',
                 'order_id' => 'required'            
-            ]);
+            ]);intval($this->transaction_req["transaction_details"]["gross_amount"]) - 
             $data = $this->insertData;
 
         } else {

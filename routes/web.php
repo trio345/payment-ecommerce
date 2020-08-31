@@ -43,7 +43,7 @@ $router->get('/', function () use ($router) {
         $router->patch('/payment/{id}', 'PaymentController@update');
         $router->delete('/payment/{id}', 'PaymentController@delete');
 
-        $router->post('/login', 'UserController@create');
+        $router->post('/login', 'UserController@login');
 
         $router->post('/payment/midtrans/push', 'PaymentController@pushNotif');
 
