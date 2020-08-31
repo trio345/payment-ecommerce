@@ -28,19 +28,19 @@ $router->get('/', function () use ($router) {
         $router->post('/order', 'OrderController@create');
         $router->get('/order', 'OrderController@index');
         $router->get('/order/{id}', 'OrderController@find');
-        $router->patch('/order/{id}', 'OrderController@update');
+        $router->put('/order/{id}', 'OrderController@update');
         $router->delete('/order/{id}', 'OrderController@delete');
 
         $router->post('/product', 'ProductController@create');
         $router->get('/product', 'ProductController@index');
         $router->get('/product/{id}', 'ProductController@find');
-        $router->patch('/product/{id}', 'ProductController@update');
+        $router->put('/product/{id}', 'ProductController@update');
         $router->delete('/product/{id}', 'ProductController@delete');
 
         $router->post('/payment', 'PaymentController@create');
         $router->get('/payment', 'PaymentController@index');
         $router->get('/payment/{id}', 'PaymentController@find');
-        $router->patch('/payment/{id}', 'PaymentController@update');
+        $router->put('/payment/{id}', 'PaymentController@update');
         $router->delete('/payment/{id}', 'PaymentController@delete');
 
         $router->post('/login', 'UserController@login');

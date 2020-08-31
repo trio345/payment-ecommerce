@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Customer;
+use App\Mail\OrderMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -78,7 +80,7 @@ class CustomerController extends Controller
     {
         $this->validate($request, [
             'full_name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:customers',
             'phone_number' => 'required',
             'password' => 'required|min:8'
         ]);
@@ -92,11 +94,14 @@ class CustomerController extends Controller
 
             
         if ( Customer::create($response) ){
+            Mail::to($response["email"])->send(new OrderMail());
             return response($content = ["status" => "success", "data" => $response], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
         }
     }
+
+
 
 
     public function find($id)

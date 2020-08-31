@@ -14,7 +14,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'status'
+        'user_id', 'status', 'amount'
     ];
 
     /**
@@ -28,9 +28,9 @@ class Order extends Model
         return $this->belongsTo('App\Customer');
      }
 
-     public function order_items()
+     public function order_details()
      {
-         return $this->hasMany('App\OrderItem', 'order_id');
+         return $this->hasMany('App\OrderDetail', 'order_id');
      }
 
      public function payments()

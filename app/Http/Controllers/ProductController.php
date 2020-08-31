@@ -23,7 +23,7 @@ class ProductController extends Controller
     public function index(){
         $datas = Product::all();
         if ( $datas ){
-            return response($content = ["status" => "success", "data" => ["attributes" => $datas]], $status = 201);
+            return response($content = ["status" => "success", "data" => $datas], $status = 201);
         }
     }
 
@@ -48,7 +48,7 @@ class ProductController extends Controller
         $data->images = $request->input('images');
             
         if ( $data->save() ){
-            return response($content = ["status" => "success", "data" => ["attributes" => $data]], $status = 201);
+            return response($content = ["status" => "success", "data"  => $data], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
         }
@@ -75,9 +75,6 @@ class ProductController extends Controller
             "images" => $request->input('images')
         ];
 
-        // var_dump($data);
-        // dd();
-
         if ( Product::create($data) ){
             return response($content = ["status" => "success", "data" => $data], $status = 201);
         } else {
@@ -91,9 +88,9 @@ class ProductController extends Controller
         $data = Product::find($id);
 
         if ( $data ){
-            return response($content = ["status" => "success", "data" => ["attributes" => $data]], $status = 201);
+            return response($content = ["status" => "success", "data"=> $data], $status = 201);
         } else {
-            return response($content = ["status" => "failed", "messages"=>"customer not found!"]);
+            return response($content = ["status" => "failed", "messages"=>"product not found!"]);
         }
     }
 
@@ -102,7 +99,7 @@ class ProductController extends Controller
     {
         $data = Product::find($id);
         if ($data->delete()){
-            return response($content = ["status" => "success", "messages" => "berhasil dihapus"], $status = 201);
+            return response($content = ["status" => "success", "messages" => "product berhasil dihapus"], $status = 201);
         } else {
             return response($content = ["status" => "failed", "messages"=>"gagal dihapus!"]);
         }

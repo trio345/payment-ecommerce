@@ -27,7 +27,7 @@ class PaymentController extends Controller
     public function index(){
         $datas = Payment::all();
         if ( $datas ){
-            return response($content = ["status" => "success", "data" => ["attributes" => $datas]], $status = 201);
+            return response($content = ["status" => "success", "data" => $datas], $status = 201);
         }
     }
 
@@ -53,7 +53,7 @@ class PaymentController extends Controller
 
             
         if ( $data->save() ){
-            return response($content = ["status" => "success", "data" => ["attributes" => $data]], $status = 201);
+            return response($content = ["status" => "success", "data" => $data], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
         }
@@ -153,7 +153,7 @@ class PaymentController extends Controller
         $data = Payment::find($id);
 
         if ( $data ){
-            return response($content = ["status" => "success", "data" => ["attributes" => $data]], $status = 201);
+            return response($content = ["status" => "success", "data" => $data], $status = 201);
         } else {
             return response($content = ["status" => "failed", "messages"=>"customer not found!"]);
         }
