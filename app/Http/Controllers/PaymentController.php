@@ -81,7 +81,7 @@ class PaymentController extends Controller
                 "gross_amount" => $this->transaction_req["transaction_details"]["gross_amount"],
                 "transaction_time" => date('Y-m-d'),
                 "transaction_status" => "finish",
-                "change" => intval($this->transaction_req["transaction_details"]["gross_amount"]) - $this->transaction_req["transaction_details"]["cash"] 
+                "change" => $this->transaction_req["transaction_details"]["cash"] - intval($this->transaction_req["transaction_details"]["gross_amount"])
             ];
 
             $this->validate($request, [
