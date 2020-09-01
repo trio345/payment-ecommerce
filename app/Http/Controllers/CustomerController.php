@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Customer;
+use App\Mail\CustomerMail;
 use App\Mail\OrderMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 
 
 class CustomerController extends Controller
@@ -19,7 +21,7 @@ class CustomerController extends Controller
      */
     public function __construct()
     {
-        //
+        Cache::flush();
     }
 
     public function index(){
@@ -55,7 +57,8 @@ class CustomerController extends Controller
         }
     }
 
-    public function changePassword(Request $request, $id){
+    public function changePassword(Request $request, $id)
+    {
         if ( Customer::find($id) != [] ){
             $data = Customer::find($id);
         } else {
@@ -91,10 +94,12 @@ class CustomerController extends Controller
             "phone_number" => $request->input('phone_number'),
             "password" => Hash::make($request->input('password'))
         ];
-
-            
+    
+        
         if ( Customer::create($response) ){
-            // Mail::to($response["email"])->send(new OrderMail());
+            // lanjut dirumah
+            // Mail::to($response["email"])->send(new CustomerMail);
+            
             return response($content = ["status" => "success", "data" => $response], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);

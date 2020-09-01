@@ -28,5 +28,10 @@ class Product extends Model
      {
          return $this->hasMany('App\OrderItem');
      }
+
+     public function categorys()
+     {
+         return $this->hasOne('App\Category');
+     }
     
 }

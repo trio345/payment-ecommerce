@@ -70,11 +70,11 @@ class ProductController extends Controller
             "name" => $request->input('name'),
             "price" => $request->input('price'),
             "description" => $request->input('description'),
-            "category" => $request->input('category'),
+            "category" => strtolower($request->input('category')),
             "stock" => $request->input('stock'),
             "images" => $request->input('images')
         ];
-
+        
         if ( Product::create($data) ){
             return response($content = ["status" => "success", "data" => $data], $status = 201);
         } else {
