@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Customer;
-use App\Mail\CustomerMail;
+use App\Mail\RegisterMail;
+use App\Mail\ResetPasswordMail;
 use App\Mail\OrderMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 
 
@@ -78,6 +81,40 @@ class CustomerController extends Controller
 
     }
 
+    public function resetPassword(Request $request){
+        $this->validate($request, [
+            "email" => 'required|email|exists:customers'
+        ]);
+        
+        $customer = Customer::where('email', $request->input('email'))->first();
+        
+        $customer->token = Str::random(6);
+        $customer->save();
+
+        Mail::to($customer["email"])->send(new ResetPasswordMail($customer));
+        return response()->json(["status" => true, "token" => $customer->token], 201);
+
+    }
+
+    public function retriveToken(Request $request, $token){
+        $this->validate($request, [
+            "email" => 'required|email',
+            "password" => 'required|min:8'
+        ]);
+
+        $customer = Customer::where('token', $token)->first();
+        if ( $customer["token"] != null){
+            if ($customer["email"] == $request->input('email')){
+                $customer->password = Hash::make($request->input("password"));
+                $customer->token = null;
+                $customer->save();
+                return response()->json(["status" => true, "message" => "success reset password"], 200);
+            } else {    
+                return response()->json(["status" => false, "message" => "failed reset password!"], 301);
+            }
+        }  
+    }
+
 
     public function create(Request $request)
     {
@@ -97,17 +134,25 @@ class CustomerController extends Controller
     
         
         if ( Customer::create($response) ){
-            // lanjut dirumah
-            $req = [
-                ""
-            ];
-
-            $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);
+            $customer = Customer::where('email', $response["email"])->first();
+            $customer->token = Str::random(42);
+            $customer->save();
+            // $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);' 
+            Mail::to($customer["email"])->send(new RegisterMail($customer));
 
             return response($content = ["status" => "success", "data" => $response], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
         }
+    }
+
+    public function verifyRegister(Request $request, $token){
+       $customer = Customer::where('token', $token)->first();
+       if ( $customer["token"] != null){
+           $customer->status = 1;
+           $customer->token = null;
+           $customer->save();
+       }
     }
 
     public function find($id)
