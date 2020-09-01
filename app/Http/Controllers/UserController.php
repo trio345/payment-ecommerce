@@ -21,6 +21,8 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $data = Customer::where('email', $request->input('email'))->get();
+        // print_r($data);
+        // dd();
 
         $this->validate($request, [
             'email' => 'required|email',
@@ -28,6 +30,7 @@ class UserController extends Controller
         ]);
 
         $req = $request->all();
+        // for ( $i = 0; $i < count)
 
         if ( $req["email"] == $data[0]["email"] && 
              $req["password"] == $data[0]["password"])
@@ -35,7 +38,7 @@ class UserController extends Controller
                 $user = new User();
                 $user->user_id = $data[0]["id"];
                 $user->save();
-                return response($content = ["status" => "success login", "data" => $data[0]], $status = 201);
+                return response($content = ["messages" => "success login", "status" => true, "data" => [$data[0]]], $status = 201);
             } else {
                 return response($content = ["status" => "failed", "message" => "failed login wrong email or password"], 300);
             }

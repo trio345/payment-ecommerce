@@ -94,7 +94,7 @@ class CustomerController extends Controller
 
             
         if ( Customer::create($response) ){
-            Mail::to($response["email"])->send(new OrderMail());
+            // Mail::to($response["email"])->send(new OrderMail());
             return response($content = ["status" => "success", "data" => $response], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
