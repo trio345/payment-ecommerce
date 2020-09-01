@@ -20,7 +20,7 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $data = Customer::where('email', $request->input('email'))->get();
+        $data = Customer::where('email', $request->input('email'))->update();
         // print_r($data);
         // dd();
 

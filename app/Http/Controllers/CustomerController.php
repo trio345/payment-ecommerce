@@ -98,17 +98,17 @@ class CustomerController extends Controller
         
         if ( Customer::create($response) ){
             // lanjut dirumah
-            // Mail::to($response["email"])->send(new CustomerMail);
-            // Mail::raw('Raw string email', function($msg) { $msg->to(['dasdadad@gmail.com']); $msg->from(['x@x.com']); });
+            $req = [
+                ""
+            ];
+
+            $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);
 
             return response($content = ["status" => "success", "data" => $response], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
         }
     }
-
-
-
 
     public function find($id)
     {
