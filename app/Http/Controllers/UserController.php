@@ -30,19 +30,18 @@ class UserController extends Controller
         ]);
 
         $req = $request->all();
-        // for ( $i = 0; $i < count)
-        
-        // if (  )
 
+        if ( sizeof($data) > 0){
             if ( $req["email"] == $data[0]["email"] && 
-                $req["password"] == $data[0]["password"])
-                {
-                    $user = new User();
-                    $user->user_id = $data[0]["id"];
-                    $user->save();
-                    return response($content = ["messages" => "success login", "status" => true, "data" => $data[0]], $status = 201);
-                } else {
-                    return response($content = ["status" => "failed", "message" => "failed login wrong email or password"], 300);
-                }
+            $req["password"] == $data[0]["password"])
+            {
+                $user = new User();
+                $user->user_id = $data[0]["id"];
+                $user->save();
+                return response($content = ["messages" => "success login", "status" => true, "data" => $data[0]], $status = 201);
+            } 
+        } else {
+            return response($content = ["status" => "failed", "message" => "failed login wrong email or password"], 300);
+        }
     }
 }

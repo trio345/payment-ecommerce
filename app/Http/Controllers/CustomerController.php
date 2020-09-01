@@ -89,7 +89,7 @@ class CustomerController extends Controller
             "full_name" => $request->input('full_name'),
             "email" => $request->input('email'),
             "phone_number" => $request->input('phone_number'),
-            "password" => $request->input('password')
+            "password" => Hash::make($request->input('password'))
         ];
 
             
