@@ -150,10 +150,10 @@ class CustomerController extends Controller
 
                     return response($content = ["status" => "success", "data" => $customer], $status = 201);
                 } else {
-                    return response($content = ["status" => "failed", "data" => null], $status = 300);
+                    return response($content = ["status" => "failed", "data" => null], $status = 400);
                 }
         } else {
-            return response($content = ["messages" => "Email already used", "status" => false], $status = 303);
+            return response($content = ["messages" => "Email already used", "status" => false], $status = 400);
         }
 
             
