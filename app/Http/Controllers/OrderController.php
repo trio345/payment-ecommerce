@@ -70,7 +70,7 @@ class OrderController extends Controller
         $request_all = $request->all();
         $order->user_id = $request_all["user_id"];
         $order->amount = $request_all["amount"];
-        $order->status = $request_all["status"];
+        $order->status = "created";
         
         if ( $order->save() ){
 
@@ -96,7 +96,7 @@ class OrderController extends Controller
         if ( $order->delete() ){
             $order_item = OrderDetail::where('order_id', $id)->delete();
         
-            return $this->response->baseResponse("Success delete data", $order, true, 201);
+            return $this->response->baseResponse("Success delete data", $this->data, true, 201);
         } else {
             return $this->response->baseResponse("Failed delete data", $this->data, false, 400);
         }
@@ -107,7 +107,7 @@ class OrderController extends Controller
     {
         $getJoin = Order::where('id', $id)->with('order_details')->get();
         
-        if ($getJoin){
+        if (sizeof($getJoin) > 0){
             return $this->response->baseResponse("Success retrive data", $getJoin, true, 201);
         } else{ 
             return $this->response->baseResponse("Data not found!", $this->data, false, 400);
