@@ -44,7 +44,7 @@ class UserController extends Controller
                     return response($content = ["messages" => "Wrong email", "status" => false], $status = 300);
                 }
             } else {
-                return response($content = ["messages" => "Please verify your account !", "status" => false], 302);
+                return response($content = ["messages" => "Please verify your account !", "status" => false, "data" => []], 302);
             }
 
                 
