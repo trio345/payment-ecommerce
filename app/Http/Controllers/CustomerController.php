@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Controller;
 
 
 class CustomerController extends Controller
@@ -22,17 +23,17 @@ class CustomerController extends Controller
      *
      * @return void
      */
-
      
     public function __construct()
     {
         Cache::flush();
+        $this->response = new Controller();
     }
 
     public function index(){
         $datas = Customer::all();
         if ( $datas ){
-            return response($content = ["message" => "success retrive data", "status" => true,"data" => $datas], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $datas, true, 201);
         }
     }
 
@@ -41,7 +42,7 @@ class CustomerController extends Controller
         if ( Customer::find($id) != [] ){
             $data = Customer::find($id);
         } else {
-            return response()->json($content = ["status" => "302", "messages" => "user not found"]);
+            return $this->response->baseResponse("User not found!", $datas, false, 400);
         }
 
         $this->validate($request, [
@@ -56,32 +57,33 @@ class CustomerController extends Controller
         $data->phone_number = $request->input('phone_number');
     
         if ( $data->save() ){
-            return response($content = ["status" => "success", "data" => $data], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed"]);
+            $data = new \stdClass;
+            return $this->response->baseResponse("Failed save data", $data, false, 400);
         }
     }
 
-    public function changePassword(Request $request, $id)
-    {
-        if ( Customer::find($id) != [] ){
-            $data = Customer::find($id);
-        } else {
-            return response()->json($content = ["status" => "302", "messages" => "user not found"]);
-        }
+    // public function changePassword(Request $request, $id)
+    // {
+    //     if ( Customer::find($id) != [] ){
+    //         $data = Customer::find($id);
+    //     } else {
+    //         return $this->response->baseResponse("User not found!", $datas, true, 400);
+    //     }
 
-        $this->validate($request, [
-            'new_password' => 'required|min:8'
-        ]);
+    //     $this->validate($request, [
+    //         'new_password' => 'required|min:8'
+    //     ]);
 
-        $req = $request->all();
-        if ($req != []){
-            $data->password = $req["new_password"];
-            $data->save();
-            return response()->json($content = ["status" => 400, "messages" => "password has been changed!"], 400);
-        }
+    //     $req = $request->all();
+    //     if ($req != []){
+    //         $data->password = $req["new_password"];
+    //         $data->save();
+    //         return $this->response->baseResponse("Password has been changed", $datas, true, 400);
+    //     }
 
-    }
+    // }
 
     public function resetPassword(Request $request){
         $this->validate($request, [
@@ -94,10 +96,11 @@ class CustomerController extends Controller
             $customer->token = Str::random(6);
             $customer->save();
 
-            Mail::to($customer["email"])->send(new ResetPasswordMail($customer));
+            // Mail::to($customer["email"])->send(new ResetPasswordMail($customer));
             return response()->json(["status" => true, "token" => $customer->token], 201);
         } else {
-            return response()->json(["message" => "Email isn't register"], 301);
+            $data = new \stdClass;
+            return $this->response->baseResponse("Email isn't registed", $data, false, 400);
         }
         
 
@@ -150,7 +153,7 @@ class CustomerController extends Controller
 
                     return response($content = ["status" => "success", "data" => $customer], $status = 201);
                 } else {
-                    return response($content = ["status" => "failed", "data" => null], $status = 400);
+                    return $this->response->baseResponse("Failed insert data!", $data, false, 400);
                 }
         } else {
             return response($content = ["messages" => "Email already used", "status" => false], $status = 400);
@@ -165,7 +168,10 @@ class CustomerController extends Controller
            $customer->status = 1;
            $customer->token = null;
            $customer->save();
+
+           return $this->view('emails.success_verify');
        }
+       
     }
 
     public function find($id)
@@ -173,9 +179,10 @@ class CustomerController extends Controller
         $data = Customer::find($id);
 
         if ( $data ){
-            return response($content = ["status" => "success", "data" => $data], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed", "messages"=>"customer not found!"]);
+            $data = new \stdClass;
+            return $this->response->baseResponse("Failed get data", $data, false, 400);
         }
     }
 
@@ -183,9 +190,9 @@ class CustomerController extends Controller
     {
         $data = Customer::find($id);
         if ($data->delete()){
-            return response($content = ["status" => "success", "messages" => "berhasil dihapus"], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed", "messages"=>"gagal dihapus!"]);
+            return $this->response->baseResponse("Failed delete data!", $data, false, 400);
         }
     }
 }

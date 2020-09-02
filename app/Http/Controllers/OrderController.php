@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderDetail;
 use Illuminate\Support\Facades\Http;
@@ -21,13 +22,14 @@ class OrderController extends Controller
      */
     public function __construct()
     {
-        // /
+        $this->data = new \stdClass;
+        $this->response = new Controller();
     }
 
     public function index(){
         $datas = Order::with('order_details')->get();
         if ( $datas ){
-            return response($content = ["status" => "success", "data" => $datas], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $datas, true, 201);
         }
     }
 
@@ -53,7 +55,7 @@ class OrderController extends Controller
             }
         }
 
-    return response($content = ["status" => "success", "messages" => "Data berhasil diupdate!"], 201);
+        return $this->response->baseResponse("Success update data", $order, true, 201); 
     }
 
 
@@ -68,7 +70,7 @@ class OrderController extends Controller
         $request_all = $request->all();
         $order->user_id = $request_all["user_id"];
         $order->amount = $request_all["amount"];
-        $order->status = 'created';
+        $order->status = $request_all["status"];
         
         if ( $order->save() ){
 
@@ -83,7 +85,7 @@ class OrderController extends Controller
 
             
         }
-        return response($content = ["status" => "success", "messages" => "Data berhasil ditambahkan"], 201);
+        return $this->response->baseResponse("Success insert data", $order, true, 201);
 
     }
 
@@ -94,9 +96,9 @@ class OrderController extends Controller
         if ( $order->delete() ){
             $order_item = OrderDetail::where('order_id', $id)->delete();
         
-            return response($content = ["status" => "success", "messages" => "Data berhasil dihapus!"], $status = 201);
+            return $this->response->baseResponse("Success delete data", $order, true, 201);
         } else {
-            return response($content = ["status" => "failed", "messages"=>"customer not found!"]);
+            return $this->response->baseResponse("Failed delete data", $this->data, false, 400);
         }
     }
 
@@ -106,9 +108,9 @@ class OrderController extends Controller
         $getJoin = Order::where('id', $id)->with('order_details')->get();
         
         if ($getJoin){
-            return response()->json(["messages"=>"success retrive data", "status" => true, "data" => $getJoin], 201);
+            return $this->response->baseResponse("Success retrive data", $getJoin, true, 201);
         } else{ 
-            return response()->json(["messages"=>"data not found"], 403);
+            return $this->response->baseResponse("Data not found!", $this->data, false, 400);
         }
     }
 }

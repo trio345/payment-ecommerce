@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Product;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -17,13 +18,14 @@ class ProductController extends Controller
 
     public function __construct()
     {
-        //
+        $this->response = new Controller();
+        $this->data = new \stdClass;
     }
 
     public function index(){
         $datas = Product::all();
         if ( $datas ){
-            return response($content = ["status" => "success", "data" => $datas], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $datas, true, 201);
         }
     }
 
@@ -48,9 +50,9 @@ class ProductController extends Controller
         $data->images = $request->input('images');
             
         if ( $data->save() ){
-            return response($content = ["status" => "success", "data"  => $data], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed"]);
+            return $this->response->baseResponse("Failed retrive data", $this->data, false, 400);
         }
     }
 
@@ -76,9 +78,9 @@ class ProductController extends Controller
         ];
         
         if ( Product::create($data) ){
-            return response($content = ["status" => "success", "data" => $data], $status = 201);
+            return $this->response->baseResponse("Success create data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed"]);
+            return $this->response->baseResponse("Failed retrive data", $this->data, false, 400);
         }
     }
 
@@ -88,9 +90,9 @@ class ProductController extends Controller
         $data = Product::find($id);
 
         if ( $data ){
-            return response($content = ["status" => "success", "data"=> $data], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed", "messages"=>"product not found!"]);
+            return $this->response->baseResponse("Failed retrive data", $this->data, false, 400);
         }
     }
 
@@ -99,9 +101,9 @@ class ProductController extends Controller
     {
         $data = Product::find($id);
         if ($data->delete()){
-            return response($content = ["status" => "success", "messages" => "product berhasil dihapus"], $status = 201);
+            return $this->response->baseResponse("Success remove data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed", "messages"=>"gagal dihapus!"]);
+            return $this->response->baseResponse("Failed remove data", $this->data, false, 400);
         }
     }
 }

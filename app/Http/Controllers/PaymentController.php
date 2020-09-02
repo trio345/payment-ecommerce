@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -22,12 +24,14 @@ class PaymentController extends Controller
         $this->url = 'https://api.sandbox.midtrans.com/v2/charge';
         $this->transaction_req = [];
         $this->insertData = [];
+        $this->data = new \stdClass;
+        $this->response = new Controller();
     }
 
     public function index(){
         $datas = Payment::all();
         if ( $datas ){
-            return response($content = ["status" => "success", "data" => $datas], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $datas, true, 201);
         }
     }
 
@@ -53,16 +57,14 @@ class PaymentController extends Controller
 
             
         if ( $data->save() ){
-            return response($content = ["status" => "success", "data" => $data], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed"]);
+            return $this->response->baseResponse("Failed retrive data", $this->data, true, 400);
         }
     }
 
     public function create(Request $request)
     {
-        
-
         $req = $request->all();
 
         if ( $req["payment_type"] == "cash"){
@@ -139,12 +141,9 @@ class PaymentController extends Controller
         }
         
         if (Payment::create($this->insertData)){
-            return response()->json(["status" => "success", 
-                                "message" => "Transaksi berhasil!",
-                                "results" => $data ], 200);
+            return $this->response->baseResponse("Transaction successfully!", $data, true, 201);
         } else {
-            return response()->json(["status" => "failed",
-                                 "message" => "Transaksi gagal mohon hubungi admin"], 401);
+            return $this->response->baseResponse("Failed send transaction", $this->data, false, 400);
         }
     }
         
@@ -153,9 +152,9 @@ class PaymentController extends Controller
         $data = Payment::find($id);
 
         if ( $data ){
-            return response($content = ["status" => "success", "data" => $data], $status = 201);
+            return $this->response->baseResponse("Success retrive data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed", "messages"=>"customer not found!"]);
+            return $this->response->baseResponse("Customer not found!", $this->data, false, 400);
         }
     }
 
@@ -164,9 +163,9 @@ class PaymentController extends Controller
     {
         $data = Payment::find($id);
         if ($data->delete()){
-            return response($content = ["status" => "success", "messages" => "berhasil dihapus"], $status = 201);
+            return $this->response->baseResponse("Success remove data", $data, true, 201);
         } else {
-            return response($content = ["status" => "failed", "messages"=>"gagal dihapus!"]);
+            return $this->response->baseResponse("Failed remove data", $this->data, false, 400);
         }
     }
 
