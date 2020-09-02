@@ -120,7 +120,7 @@ class CustomerController extends Controller
     {
         $this->validate($request, [
             'full_name' => 'required',
-            'email' => 'required|email|unique:customers',
+            'email' => 'required|email',
             'phone_number' => 'required',
             'password' => 'required|min:8'
         ]);
@@ -131,19 +131,24 @@ class CustomerController extends Controller
             "phone_number" => $request->input('phone_number'),
             "password" => Hash::make($request->input('password'))
         ];
-    
-        
-        if ( Customer::create($response) ){
-            $customer = Customer::where('email', $response["email"])->first();
-            $customer->token = Str::random(42);
-            $customer->save();
-            // $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);' 
-            Mail::to($customer["email"])->send(new RegisterMail($customer));
+        $customer = Customer::where('email', $response["email"])->first();
+        if ( $customer["email"] != $response["email"]){
+            if ( Customer::create($response) ){
+                
+                $customer->token = Str::random(42);
+                $customer->save();
+                // $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);' 
+                Mail::to($customer["email"])->send(new RegisterMail($customer));
 
-            return response($content = ["status" => "success", "data" => $customer], $status = 201);
+                return response($content = ["status" => "success", "data" => $customer], $status = 201);
+            } else {
+                return response($content = ["status" => "failed", "data" => null], $status = 300);
+            }
         } else {
-            return response($content = ["status" => "failed"]);
+            return response($content = ["messages" => "Email already used", "status" => false], $status = 303);
         }
+
+            
     }
 
     public function verifyRegister(Request $request, $token){
@@ -175,5 +180,4 @@ class CustomerController extends Controller
             return response($content = ["status" => "failed", "messages"=>"gagal dihapus!"]);
         }
     }
-
 }
