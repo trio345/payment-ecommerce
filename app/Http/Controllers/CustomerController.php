@@ -85,16 +85,21 @@ class CustomerController extends Controller
 
     public function resetPassword(Request $request){
         $this->validate($request, [
-            "email" => 'required|email|exists:customers'
+            "email" => 'required|email'
         ]);
         
         $customer = Customer::where('email', $request->input('email'))->first();
         
-        $customer->token = Str::random(6);
-        $customer->save();
+        if ( $customer !== null ){
+            $customer->token = Str::random(6);
+            $customer->save();
 
-        Mail::to($customer["email"])->send(new ResetPasswordMail($customer));
-        return response()->json(["status" => true, "token" => $customer->token], 201);
+            Mail::to($customer["email"])->send(new ResetPasswordMail($customer));
+            return response()->json(["status" => true, "token" => $customer->token], 201);
+        } else {
+            return response()->json(["message" => "Email isn't register"], 301);
+        }
+        
 
     }
 

@@ -94,7 +94,7 @@ class OrderController extends Controller
         if ( $order->delete() ){
             $order_item = OrderDetail::where('order_id', $id)->delete();
         
-            return response($content = ["status" => "success", "message" => "Data berhasil dihapus!"], $status = 201);
+            return response($content = ["status" => "success", "messages" => "Data berhasil dihapus!"], $status = 201);
         } else {
             return response($content = ["status" => "failed", "messages"=>"customer not found!"]);
         }

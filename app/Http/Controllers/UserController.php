@@ -49,7 +49,7 @@ class UserController extends Controller
 
                 
         } else {
-            return response($content = ["status" => "failed", "message" => "failed login wrong email or password"], 322);
+            return response($content = ["status" => "failed", "messages" => "failed login wrong email or password"], 322);
         }
     }
 }
