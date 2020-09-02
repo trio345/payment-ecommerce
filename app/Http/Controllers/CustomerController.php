@@ -140,7 +140,7 @@ class CustomerController extends Controller
             // $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);' 
             Mail::to($customer["email"])->send(new RegisterMail($customer));
 
-            return response($content = ["status" => "success", "data" => $response], $status = 201);
+            return response($content = ["status" => "success", "data" => $customer], $status = 201);
         } else {
             return response($content = ["status" => "failed"]);
         }

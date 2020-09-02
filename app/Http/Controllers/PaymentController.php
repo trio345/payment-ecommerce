@@ -42,7 +42,7 @@ class PaymentController extends Controller
             'gross_amount' => 'required',
             'transaction_time' => 'required',
             'transaction_status' => 'required'
-                    ]);
+            ]);
 
         $data->order_id = $request->input('order_id');
         $data->transaction_id = $request->input('transaction_id');
