@@ -22,6 +22,8 @@ class CustomerController extends Controller
      *
      * @return void
      */
+
+     
     public function __construct()
     {
         Cache::flush();
@@ -96,24 +98,24 @@ class CustomerController extends Controller
 
     }
 
-    public function retriveToken(Request $request, $token){
-        $this->validate($request, [
-            "email" => 'required|email',
-            "password" => 'required|min:8'
-        ]);
+    // public function retriveToken(Request $request, $token){
+    //     $this->validate($request, [
+    //         "email" => 'required|email',
+    //         "password" => 'required|min:8'
+    //     ]);
 
-        $customer = Customer::where('token', $token)->first();
-        if ( $customer["token"] != null){
-            if ($customer["email"] == $request->input('email')){
-                $customer->password = Hash::make($request->input("password"));
-                $customer->token = null;
-                $customer->save();
-                return response()->json(["status" => true, "message" => "success reset password"], 200);
-            } else {    
-                return response()->json(["status" => false, "message" => "failed reset password!"], 301);
-            }
-        }  
-    }
+    //     $customer = Customer::where('token', $token)->first();
+    //     if ( $customer["token"] != null){
+    //         if ($customer["email"] == $request->input('email')){
+    //             $customer->password = Hash::make($request->input("password"));
+    //             $customer->token = null;
+    //             $customer->save();
+    //             return response()->json(["status" => true, "message" => "success reset password"], 200);
+    //         } else {    
+    //             return response()->json(["status" => false, "message" => "failed reset password!"], 301);
+    //         }
+    //     }  
+    // }
 
 
     public function create(Request $request)
@@ -132,18 +134,19 @@ class CustomerController extends Controller
             "password" => Hash::make($request->input('password'))
         ];
         $customer = Customer::where('email', $response["email"])->first();
-        if ( $customer["email"] != $response["email"]){
-            if ( Customer::create($response) ){
-                
-                $customer->token = Str::random(42);
-                $customer->save();
-                // $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);' 
-                Mail::to($customer["email"])->send(new RegisterMail($customer));
+    
+        if ($customer === null){
+                if ( Customer::create($response) ){
+                    $customer = Customer::where('email', $response["email"])->first();
+                    $customer->token = Str::random(42);
+                    $customer->save();
+                    // $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);' 
+                    Mail::to($customer["email"])->send(new RegisterMail($customer));
 
-                return response($content = ["status" => "success", "data" => $customer], $status = 201);
-            } else {
-                return response($content = ["status" => "failed", "data" => null], $status = 300);
-            }
+                    return response($content = ["status" => "success", "data" => $customer], $status = 201);
+                } else {
+                    return response($content = ["status" => "failed", "data" => null], $status = 300);
+                }
         } else {
             return response($content = ["messages" => "Email already used", "status" => false], $status = 303);
         }

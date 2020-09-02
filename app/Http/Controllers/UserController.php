@@ -36,12 +36,12 @@ class UserController extends Controller
                         $user = new User();
                         $user->user_id = $data[0]["id"];
                         $user->save();
-                        return response($content = ["messages" => "success login", "status" => true, "data" => $data[0]], $status = 201);
+                        return response($content = ["messages" => "Success login", "status" => true, "data" => $data[0]], $status = 201);
                     } else {
-                        return response($content = ["messages" => "wrong password", "status" => false], $status = 300);
+                        return response($content = ["messages" => "Wrong password", "status" => false], $status = 300);
                     }
                 } else {
-                    return response($content = ["messages" => "wrong email", "status" => false], $status = 300);
+                    return response($content = ["messages" => "Wrong email", "status" => false], $status = 300);
                 }
             } else {
                 return response($content = ["messages" => "Please verify your account !", "status" => false], 302);
