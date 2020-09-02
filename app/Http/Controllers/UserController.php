@@ -38,13 +38,13 @@ class UserController extends Controller
                         $user->save();
                         return response($content = ["messages" => "Success login", "status" => true, "data" => $data[0]], $status = 201);
                     } else {
-                        return response($content = ["messages" => "Wrong password", "status" => false, "data" => []], $status = 300);
+                        return response($content = ["messages" => "Wrong password", "status" => false, "data" => []], $status = 201);
                     }
                 } else {
-                    return response($content = ["messages" => "Wrong email", "status" => false, "data" => []], $status = 300);
+                    return response($content = ["messages" => "Wrong email", "status" => false, "data" => []], $status = 201);
                 }
             } else {
-                return response($content = ["messages" => "Please verify your account !", "status" => false, "data" => []], 302);
+                return response($content = ["messages" => "Please verify your account !", "status" => false, "data" => []], 201);
             }
 
                 
