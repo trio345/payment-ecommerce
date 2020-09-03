@@ -12,11 +12,14 @@
   </head>
   <body>
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                
-            </div>
+      <div class="card mb-3">
+        <img src="{{ URL::asset('/image/verified-mail.png') }}" height="500" weight="400" class="card-img-top" alt="Relative images">
+        <div class="card-body">
+          <h5 class="card-title">Congratulations! Your mail has been verified!</h5>
+          <p class="card-text">Thank you for submiting <b> Your Cashier </b>. Hope you can increasing your bussiness with us!.</p>
+          <p class="card-text"><small class="text-muted">Your Cashier Production</small></p>
         </div>
+      </div>
     </div>
 
     <!-- Optional JavaScript -->

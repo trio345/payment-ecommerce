@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
+use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class CustomerController extends Controller
@@ -28,6 +31,7 @@ class CustomerController extends Controller
     {
         Cache::flush();
         $this->response = new Controller();
+
     }
 
     public function index(){
@@ -172,6 +176,7 @@ class CustomerController extends Controller
            
        }
 
+    //    $url = Storage::url('verified-mail.png');
        return view('emails.success_verify');
        
     }
