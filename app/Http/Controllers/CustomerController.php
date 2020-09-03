@@ -169,8 +169,10 @@ class CustomerController extends Controller
            $customer->token = null;
            $customer->save();
 
-           return $this->view('emails.success_verify');
+           
        }
+
+       return view('emails.success_verify');
        
     }
 
