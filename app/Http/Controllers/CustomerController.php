@@ -168,12 +168,10 @@ class CustomerController extends Controller
 
     public function verifyRegister(Request $request, $token){
        $customer = Customer::where('token', $token)->first();
+       
        if ( $customer["token"] != null){
            $customer->status = 1;
-           $customer->token = null;
-           $customer->save();
-
-           
+           $customer->save();        
        }
 
     //    $url = Storage::url('verified-mail.png');
