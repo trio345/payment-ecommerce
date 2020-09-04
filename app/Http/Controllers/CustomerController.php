@@ -100,7 +100,7 @@ class CustomerController extends Controller
             $customer->token = Str::random(6);
             $customer->save();
 
-            // Mail::to($customer["email"])->send(new ResetPasswordMail($customer));
+            Mail::to($customer["email"])->send(new ResetPasswordMail($customer));
             return response()->json(["status" => true, "token" => $customer->token], 201);
         } else {
             $data = new \stdClass;
