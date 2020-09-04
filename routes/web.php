@@ -22,7 +22,7 @@ $router->get('/', function () use ($router) {
         $router->get('/customer/{id}', 'CustomerController@find');
         $router->put('/customer/{id}', 'CustomerController@update');
         $router->delete('/customer/{id}', 'CustomerController@delete');
-        $router->put('/change_password/{id}', 'CustomerController@changePassword');
+        $router->put('/change_password', 'CustomerController@changePassword');
         $router->post('/reset_password', 'CustomerController@resetPassword');
         $router->post('/verify_token/{token}', 'CustomerController@retriveToken');
         $router->get('/verify/{token}', 'CustomerController@verifyRegister');

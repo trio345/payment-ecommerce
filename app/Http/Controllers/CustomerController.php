@@ -68,26 +68,22 @@ class CustomerController extends Controller
         }
     }
 
-    // public function changePassword(Request $request, $id)
-    // {
-    //     if ( Customer::find($id) != [] ){
-    //         $data = Customer::find($id);
-    //     } else {
-    //         return $this->response->baseResponse("User not found!", $datas, true, 400);
-    //     }
+    public function changePassword(Request $request)
+    {
+        $email = $request->input('email');
+        $customer = Customer::where('email', $email)->first();
 
-    //     $this->validate($request, [
-    //         'new_password' => 'required|min:8'
-    //     ]);
+        $this->validate($request, [
+            'password' => 'required|min:8'
+        ]);
 
-    //     $req = $request->all();
-    //     if ($req != []){
-    //         $data->password = $req["new_password"];
-    //         $data->save();
-    //         return $this->response->baseResponse("Password has been changed", $datas, true, 400);
-    //     }
+        if ($customer != []){
+            $customer->password = Hash::make($request->input('password'));
+            $customer->save();
+            return $this->response->baseResponse("Password has been changed", $customer, true, 201);
+        }
 
-    // }
+    }
 
     public function resetPassword(Request $request){
         $this->validate($request, [
