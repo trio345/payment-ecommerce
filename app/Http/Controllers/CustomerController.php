@@ -142,17 +142,19 @@ class CustomerController extends Controller
             "password" => Hash::make($request->input('password'))
         ];
         $customer = Customer::where('email', $response["email"])->first();
-    
-        if ($customer === null){
-                if ( Customer::create($response) ){
-                    $customer = Customer::where('email', $response["email"])->first();
-                    $customer->token = Str::random(42);
-                    $customer->save();
+        // var_dump($customer);
+        // dd();
+        if ($customer == null){
+                if ( Customer::create($response)){
+                    $data = Customer::where('email', $response["email"])->first();
+                    $data->token = Str::random(42);
+                    $data->save();
                     // $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);' 
-                    Mail::to($customer["email"])->send(new RegisterMail($customer));
+                    Mail::to($data["email"])->send(new RegisterMail($data));
 
-                    return response($content = ["status" => "success", "data" => $customer], $status = 201);
+                    return response($content = ["status" => "success", "data" => $data], $status = 201);
                 } else {
+                    $data = new \stdClass;
                     return $this->response->baseResponse("Failed insert data!", $data, false, 400);
                 }
         } else {
