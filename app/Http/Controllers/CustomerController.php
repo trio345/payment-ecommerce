@@ -146,8 +146,9 @@ class CustomerController extends Controller
         // var_dump($customer);
         // dd();
         if ($customer == null){
-                if ( Customer::create($response)){
-                    Mail::to($data["email"])->send(new RegisterMail($customer));
+                if ( Customer::create($response)){      
+                    $data = Customer::where('email', $request->input('email'))->first();    
+                    Mail::to($response["email"])->send(new RegisterMail($data));
 
                     return response($content = ["status" => "success", "data" => $data], $status = 201);
                 } else {
