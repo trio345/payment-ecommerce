@@ -139,18 +139,15 @@ class CustomerController extends Controller
             "full_name" => $request->input('full_name'),
             "email" => $request->input('email'),
             "phone_number" => $request->input('phone_number'),
-            "password" => Hash::make($request->input('password'))
+            "password" => Hash::make($request->input('password')),
+            "token" => Str::random(42)
         ];
         $customer = Customer::where('email', $response["email"])->first();
         // var_dump($customer);
         // dd();
         if ($customer == null){
                 if ( Customer::create($response)){
-                    $data = Customer::where('email', $response["email"])->first();
-                    $data->token = Str::random(42);
-                    $data->save();
-                    // $data = Http::post('https://verticalcraneandlift.com/sendemail.php', $req);' 
-                    Mail::to($data["email"])->send(new RegisterMail($data));
+                    Mail::to($data["email"])->send(new RegisterMail($customer));
 
                     return response($content = ["status" => "success", "data" => $data], $status = 201);
                 } else {
